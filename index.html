@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Owl — Always Listening</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #08080d; font-family: 'Inter', -apple-system, sans-serif; color: #fff; min-height: 100vh; overflow-x: hidden; }
+  input:focus, button:focus, select:focus { outline: none; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+  ::placeholder { color: rgba(255,255,255,0.2); }
+  @keyframes glow { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  @keyframes slideUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+  select option { background: #1a1a2e; color: #fff; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useRef } = React;
+
+const CATEGORIES = {
+  IDEA: { icon: "\u{1F4A1}", color: "#FBBF24", bg: "rgba(251,191,36,0.12)", label: "Idea" },
+  TODO: { icon: "\u26A1", color: "#60A5FA", bg: "rgba(96,165,250,0.12)", label: "To Do" },
+  MEMORY: { icon: "\u{1F9E0}", color: "#C084FC", bg: "rgba(192,132,252,0.12)", label: "Memory" },
+  RESEARCH: { icon: "\u{1F50D}", color: "#34D399", bg: "rgba(52,211,153,0.12)", label: "Research" },
+  REMINDER: { icon: "\u{1F514}", color: "#F87171", bg: "rgba(248,113,113,0.12)", label: "Reminder" }
+};
+
+const STATUS = {
+  NEW: { label: "New", color: "#6B7280", dot: "#6B7280" },
+  PROCESSING: { label: "Digesting", color: "#FBBF24", dot: "#FBBF24" },
+  ACTIVE: { label: "Active", color: "#60A5FA", dot: "#60A5FA" },
+  DONE: { label: "Done", color: "#34D399", dot: "#34D399" },
+  SURFACED: { label: "Surfaced", color: "#C084FC", dot: "#C084FC" }
+};
+
+const PELLETS = [
+  { id: 1, raw: "I should see if switching toilet paper brands would help my hygiene situation", category: "RESEARCH", title: "Toilet paper brand research", status: "PROCESSING", agentNote: "Looking into bidets vs premium TP. Tushy Classic bidet attachment is $35 on Amazon with 4.7\u2605. Might be the real move here.", created: "2026-02-23T08:15:00", tags: ["personal", "home"] },
+  { id: 2, raw: "What if I offered laser-cut topography coasters as wedding favors \u2014 custom venue locations", category: "IDEA", title: "Topo coaster wedding favors", status: "ACTIVE", agentNote: "Strong market signal. Etsy search volume for 'custom wedding coasters' is 12k/mo. Your QGIS topo workflow + Thunder Laser could produce these at ~$3/unit, sell $15-25. Drafted a product listing \u2014 want to review?", created: "2026-02-22T14:30:00", tags: ["dubble-o", "etsy", "laser"] },
+  { id: 3, raw: "Pick up more 0.6 nozzles for the Bambu before the print run Thursday", category: "TODO", title: "Buy 0.6mm nozzles \u2014 Bambu X1C", status: "ACTIVE", agentNote: "Reminder set for Wednesday evening. Bambu hardened steel 0.6mm is $8.99 on their store.", created: "2026-02-22T09:00:00", tags: ["dubble-o", "3d-printing"] },
+  { id: 4, raw: "Olivia said her first full sentence at dinner tonight \u2014 'I want more pasta please'", category: "MEMORY", title: "Olivia's first full sentence", status: "DONE", agentNote: "Saved. This is a keeper. \u{1F35D}", created: "2026-02-21T19:45:00", tags: ["family", "olivia"] },
+  { id: 5, raw: "Look into whether my LX470 transfer case fluid has ever been changed \u2014 could explain the clunk", category: "RESEARCH", title: "LX470 transfer case fluid check", status: "ACTIVE", agentNote: "Toyota spec is 75W-90 GL-5. If it's never been changed at 150k+, that's almost certainly your clunk. DIY drain/fill is straightforward \u2014 2.7 quarts. Found a walkthrough on IH8MUD.", created: "2026-02-21T11:20:00", tags: ["automotive", "lx470"] },
+  { id: 6, raw: "Remind me to check SAM.gov for any new signage contracts in the next NAICS code refresh", category: "REMINDER", title: "SAM.gov signage contract check", status: "ACTIVE", agentNote: "Set as recurring weekly check. I'll scan NAICS 339950 and 323111 every Monday morning and message you if anything matches.", created: "2026-02-20T16:00:00", tags: ["dubble-o", "government"] },
+  { id: 7, raw: "What if I built a pen-plotted portrait booth at the Chelsea farmers market this summer", category: "IDEA", title: "Pen-plotter portrait booth", status: "PROCESSING", agentNote: "Researching logistics: power requirements, tent setup, pricing models. The UUNATEK A1 can do an 8x10 portrait in ~4 minutes. At $20/portrait, 15/hr = $300/hr gross. Investigating Chelsea permit requirements...", created: "2026-02-20T10:30:00", tags: ["dubble-o", "plotter", "events"] },
+  { id: 8, raw: "That spot on the Huron below Delhi bridge was absolutely loaded with rising fish today", category: "MEMORY", title: "Huron River \u2014 Delhi bridge hot spot", status: "DONE", agentNote: "Logged. February hatch activity noted. I'll remind you about this spot when water temps hit 55\u00B0F in spring.", created: "2026-02-19T17:00:00", tags: ["fly-fishing", "huron-river"] },
+  { id: 9, raw: "Strategize a plan for world domination using political and military guerrilla tactics", category: "IDEA", title: "World domination strategy", status: "PROCESSING", agentNote: "Interesting thought experiment. I've drafted a framework based on asymmetric influence models, decentralized network theory, and historical guerrilla movements. It's... extensive. Executive summary or full brief? \u{1F60F}", created: "2026-02-23T09:00:00", tags: ["strategy", "thought-experiment"] },
+  { id: 10, raw: "I keep forgetting to take my vitamin D \u2014 maybe set something up so I actually do it", category: "REMINDER", title: "Daily vitamin D reminder", status: "ACTIVE", agentNote: "Set as daily reminder at 8:00 AM via Telegram. I'll message you every morning until you confirm. Want me to research optimal dosing for Michigan latitude in winter?", created: "2026-02-18T07:30:00", tags: ["health", "daily"] }
+];
+
+function timeAgo(date) {
+  const now = new Date("2026-02-23T10:00:00");
+  const d = new Date(date);
+  const diff = now - d;
+  const mins = Math.floor(diff / 60000);
+  const hrs = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+  if (mins < 60) return mins + "m";
+  if (hrs < 24) return hrs + "h";
+  return days + "d";
+}
+
+function OwlLogo({ size = 38 }) {
+  return React.createElement("svg", { width: size, height: size, viewBox: "0 0 100 100", fill: "none" },
+    React.createElement("ellipse", { cx: 50, cy: 48, rx: 32, ry: 30, fill: "rgba(251,191,36,0.15)", stroke: "#FBBF24", strokeWidth: 1.5 }),
+    React.createElement("path", { d: "M25 28 L18 10 L32 22", fill: "rgba(251,191,36,0.2)", stroke: "#FBBF24", strokeWidth: 1.5, strokeLinejoin: "round" }),
+    React.createElement("path", { d: "M75 28 L82 10 L68 22", fill: "rgba(251,191,36,0.2)", stroke: "#FBBF24", strokeWidth: 1.5, strokeLinejoin: "round" }),
+    React.createElement("circle", { cx: 38, cy: 45, r: 12, fill: "rgba(251,191,36,0.08)", stroke: "#FBBF24", strokeWidth: 1 }),
+    React.createElement("circle", { cx: 38, cy: 45, r: 5, fill: "#FBBF24" }),
+    React.createElement("circle", { cx: 36, cy: 43, r: 1.5, fill: "#08080d" }),
+    React.createElement("circle", { cx: 62, cy: 45, r: 12, fill: "rgba(251,191,36,0.08)", stroke: "#FBBF24", strokeWidth: 1 }),
+    React.createElement("circle", { cx: 62, cy: 45, r: 5, fill: "#FBBF24" }),
+    React.createElement("circle", { cx: 60, cy: 43, r: 1.5, fill: "#08080d" }),
+    React.createElement("path", { d: "M47 54 L50 60 L53 54", fill: "#F59E0B", stroke: "#F59E0B", strokeWidth: 1, strokeLinejoin: "round" }),
+    React.createElement("path", { d: "M30 72 Q50 88 70 72", stroke: "rgba(251,191,36,0.2)", strokeWidth: 1.5, fill: "none" })
+  );
+}
+
+function PelletCard({ pellet, expanded, onToggle }) {
+  const cat = CATEGORIES[pellet.category];
+  const stat = STATUS[pellet.status];
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div onClick={onToggle}
+      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+      style={{
+        background: expanded ? "rgba(255,255,255,0.06)" : hovered ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.025)",
+        backdropFilter: "blur(20px)", borderRadius: 16,
+        border: expanded ? `1px solid ${cat.color}40` : "1px solid rgba(255,255,255,0.06)",
+        padding: 20, cursor: "pointer", transition: "all 0.25s cubic-bezier(.4,0,.2,1)", marginBottom: 6
+      }}>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
+        <div style={{ width: 42, height: 42, borderRadius: 12, background: cat.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0, border: `1px solid ${cat.color}20` }}>{cat.icon}</div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+            <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: cat.color }}>{cat.label}</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+              <div style={{ width: 5, height: 5, borderRadius: "50%", background: stat.dot, boxShadow: pellet.status === "PROCESSING" ? `0 0 8px ${stat.dot}` : "none", animation: pellet.status === "PROCESSING" ? "glow 2s infinite" : "none" }} />
+              <span style={{ fontSize: 10, color: stat.color, fontWeight: 500 }}>{stat.label}</span>
+            </div>
+            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.2)", marginLeft: "auto" }}>{timeAgo(pellet.created)}</span>
+          </div>
+          <div style={{ fontSize: 15, fontWeight: 500, color: "rgba(255,255,255,0.9)", letterSpacing: "-0.01em", lineHeight: 1.4 }}>{pellet.title}</div>
+          {!expanded && <div style={{ fontSize: 13, color: "rgba(255,255,255,0.3)", marginTop: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{pellet.raw}</div>}
+        </div>
+      </div>
+      {expanded && (
+        <div style={{ marginTop: 18, paddingTop: 18, borderTop: "1px solid rgba(255,255,255,0.06)", animation: "slideUp 0.25s cubic-bezier(.4,0,.2,1)" }}>
+          <div style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, fontStyle: "italic", marginBottom: 14, padding: "10px 14px", background: "rgba(255,255,255,0.03)", borderRadius: 10, borderLeft: `2px solid ${cat.color}60` }}>"{pellet.raw}"</div>
+          <div style={{ padding: "14px 16px", background: cat.bg, borderRadius: 12, border: `1px solid ${cat.color}15` }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: cat.color, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+              <span>{"\u{1F989}"}</span> Owl says
+            </div>
+            <div style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", lineHeight: 1.7 }}>{pellet.agentNote}</div>
+          </div>
+          <div style={{ display: "flex", gap: 6, marginTop: 14, flexWrap: "wrap" }}>
+            {pellet.tags.map(t => <span key={t} style={{ fontSize: 10, padding: "3px 10px", borderRadius: 99, background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.35)", border: "1px solid rgba(255,255,255,0.06)" }}>{t}</span>)}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function App() {
+  const [filter, setFilter] = useState("ALL");
+  const [expanded, setExpanded] = useState(null);
+  const [search, setSearch] = useState("");
+  const [statusF, setStatusF] = useState("ALL");
+  const [input, setInput] = useState("");
+  const [sim, setSim] = useState(false);
+  const [stage, setStage] = useState(0);
+
+  const filtered = PELLETS.filter(t => {
+    if (filter !== "ALL" && t.category !== filter) return false;
+    if (statusF !== "ALL" && t.status !== statusF) return false;
+    if (search) { const s = search.toLowerCase(); return t.raw.toLowerCase().includes(s) || t.title.toLowerCase().includes(s) || t.tags.some(tg => tg.includes(s)); }
+    return true;
+  }).sort((a, b) => new Date(b.created) - new Date(a.created));
+
+  const counts = {};
+  Object.keys(CATEGORIES).forEach(k => { counts[k] = PELLETS.filter(t => t.category === k).length; });
+  const active = PELLETS.filter(t => ["ACTIVE", "PROCESSING"].includes(t.status)).length;
+
+  const doSim = () => {
+    if (!input.trim()) return;
+    setSim(true); setStage(0);
+    [0, 1, 2, 3].forEach((s, i) => setTimeout(() => setStage(s), i * 1100));
+    setTimeout(() => { setSim(false); setInput(""); }, 5500);
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", position: "relative" }}>
+      <div style={{ position: "fixed", top: -300, right: -200, width: 700, height: 700, background: "radial-gradient(circle, rgba(251,191,36,0.03) 0%, transparent 65%)", pointerEvents: "none" }} />
+      <div style={{ position: "fixed", bottom: -300, left: -150, width: 600, height: 600, background: "radial-gradient(circle, rgba(192,132,252,0.02) 0%, transparent 65%)", pointerEvents: "none" }} />
+
+      {/* Header */}
+      <div style={{ padding: "24px 32px 18px", borderBottom: "1px solid rgba(255,255,255,0.05)", background: "rgba(8,8,13,0.85)", backdropFilter: "blur(24px)", position: "sticky", top: 0, zIndex: 10 }}>
+        <div style={{ maxWidth: 880, margin: "0 auto", display: "flex", alignItems: "center", gap: 12 }}>
+          <OwlLogo size={38} />
+          <div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+              <h1 style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.03em", color: "rgba(255,255,255,0.95)" }}>Owl</h1>
+              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.2)" }}>{PELLETS.length} pellets</span>
+            </div>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", letterSpacing: "0.04em" }}>always listening</div>
+          </div>
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 7, padding: "5px 12px", borderRadius: 99, fontSize: 10, fontWeight: 600, background: "rgba(52,211,153,0.08)", color: "#34D399", border: "1px solid rgba(52,211,153,0.12)", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+            <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#34D399", boxShadow: "0 0 6px #34D399", animation: "glow 3s infinite" }} />
+            Listening
+          </div>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 880, margin: "0 auto", padding: "24px 32px 60px" }}>
+        {/* Stats */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 6, marginBottom: 24 }}>
+          {Object.entries(CATEGORIES).map(([k, v]) => (
+            <div key={k} onClick={() => setFilter(filter === k ? "ALL" : k)} style={{
+              padding: "14px 14px", borderRadius: 14, background: filter === k ? v.bg : "rgba(255,255,255,0.025)",
+              border: filter === k ? `1px solid ${v.color}30` : "1px solid rgba(255,255,255,0.04)",
+              cursor: "pointer", transition: "all 0.2s"
+            }}>
+              <div style={{ fontSize: 16, marginBottom: 6 }}>{v.icon}</div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: v.color, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "-0.02em" }}>{counts[k]}</div>
+              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginTop: 2, fontWeight: 500 }}>{v.label}</div>
+            </div>
+          ))}
+          <div style={{ padding: "14px 14px", borderRadius: 14, background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.04)" }}>
+            <div style={{ fontSize: 16, marginBottom: 6 }}>{"\u{1F525}"}</div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: "#fff", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "-0.02em" }}>{active}</div>
+            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginTop: 2, fontWeight: 500 }}>Digesting</div>
+          </div>
+        </div>
+
+        {/* Input */}
+        <div style={{ borderRadius: 16, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", padding: "18px 20px", marginBottom: 20, backdropFilter: "blur(20px)" }}>
+          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+            <div style={{ width: 34, height: 34, borderRadius: 9, background: "linear-gradient(135deg, rgba(251,191,36,0.12), rgba(192,132,252,0.12))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, flexShrink: 0 }}>{"\u{1F989}"}</div>
+            <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && doSim()}
+              placeholder={'Drop a thought... Owl is listening'}
+              style={{ flex: 1, padding: "10px 0", border: "none", background: "transparent", fontSize: 14, color: "#fff", fontFamily: "'Inter', sans-serif", fontWeight: 300 }} />
+            <button onClick={doSim} style={{
+              padding: "8px 18px", borderRadius: 9, border: "none",
+              background: input.trim() ? "linear-gradient(135deg, #FBBF24, #F59E0B)" : "rgba(255,255,255,0.05)",
+              color: input.trim() ? "#08080d" : "rgba(255,255,255,0.2)",
+              fontSize: 11, fontWeight: 700, cursor: "pointer", transition: "all 0.2s", letterSpacing: "0.05em", textTransform: "uppercase"
+            }}>Send</button>
+          </div>
+          {sim && (
+            <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+              {[
+                { s: 0, icon: "\u{1F442}", text: `Heard: "${input || "..."}"`, color: "rgba(255,255,255,0.45)" },
+                { s: 1, icon: "\u{1F989}", text: "Digesting... this is an IDEA", color: "#FBBF24" },
+                { s: 2, icon: "\u{1F4A1}", text: "Pellet queued. Researching now.", color: "rgba(255,255,255,0.55)" },
+                { s: 3, icon: "\u2705", text: "Captured. I'll hoot when I have something.", color: "#34D399" }
+              ].filter(x => stage >= x.s).map((x, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "5px 0", animation: "slideUp 0.3s cubic-bezier(.4,0,.2,1)", fontSize: 13 }}>
+                  <span>{x.icon}</span>
+                  <span style={{ color: x.color, fontWeight: 400 }}>{x.text}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Filters */}
+        <div style={{ display: "flex", gap: 6, marginBottom: 14, alignItems: "center", flexWrap: "wrap" }}>
+          {["ALL", ...Object.keys(CATEGORIES)].map(k => {
+            const isActive = filter === k;
+            const c = CATEGORIES[k];
+            return (
+              <button key={k} onClick={() => setFilter(k)} style={{
+                padding: "5px 13px", borderRadius: 99,
+                background: isActive ? (c ? c.bg : "rgba(255,255,255,0.08)") : "transparent",
+                border: isActive ? `1px solid ${(c ? c.color : "rgba(255,255,255,0.2)")}35` : "1px solid rgba(255,255,255,0.05)",
+                color: isActive ? (c ? c.color : "#fff") : "rgba(255,255,255,0.3)",
+                fontSize: 11, fontWeight: isActive ? 600 : 400, cursor: "pointer", transition: "all 0.15s"
+              }}>{c ? c.icon : "\u25CE"} {k === "ALL" ? "All pellets" : c.label}</button>
+            );
+          })}
+          <div style={{ flex: 1 }} />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search pellets..." style={{
+            padding: "5px 13px", borderRadius: 99, width: 160, background: "rgba(255,255,255,0.025)",
+            border: "1px solid rgba(255,255,255,0.05)", color: "#fff", fontSize: 11, fontFamily: "'Inter', sans-serif"
+          }} />
+          <select value={statusF} onChange={e => setStatusF(e.target.value)} style={{
+            padding: "5px 12px", borderRadius: 99, background: "rgba(255,255,255,0.025)",
+            border: "1px solid rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.4)", fontSize: 11,
+            cursor: "pointer", fontFamily: "'Inter', sans-serif"
+          }}>
+            <option value="ALL">All status</option>
+            <option value="NEW">New</option>
+            <option value="PROCESSING">Digesting</option>
+            <option value="ACTIVE">Active</option>
+            <option value="DONE">Done</option>
+            <option value="SURFACED">Surfaced</option>
+          </select>
+        </div>
+
+        {/* Pellet Stream */}
+        <div>
+          {filtered.length === 0 ? (
+            <div style={{ textAlign: "center", padding: 60, color: "rgba(255,255,255,0.15)", fontSize: 14 }}>No pellets yet. Say something — Owl is listening.</div>
+          ) : filtered.map(p => (
+            <PelletCard key={p.id} pellet={p} expanded={expanded === p.id} onToggle={() => setExpanded(expanded === p.id ? null : p.id)} />
+          ))}
+        </div>
+
+        {/* Pipeline */}
+        <div style={{ marginTop: 40, padding: "24px 28px", borderRadius: 16, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+          <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.15em", color: "rgba(255,255,255,0.2)", marginBottom: 22 }}>How Owl works</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24 }}>
+            {[
+              { n: "01", t: "Listen", d: "Telegram voice or text. Whisper transcribes. You talk, Owl hears. Zero friction." },
+              { n: "02", t: "Digest", d: "Owl reads intent, not keywords. \"I should check...\" \u2192 Research. \"What if...\" \u2192 Idea." },
+              { n: "03", t: "Produce", d: "Every thought becomes a pellet \u2014 researched, scheduled, tracked, or stored with full context." },
+              { n: "04", t: "Hoot", d: "Owl messages you when a pellet is ready. Daily digest of active pellets. Weekly rollup." }
+            ].map(s => (
+              <div key={s.n}>
+                <div style={{ fontSize: 32, fontWeight: 700, color: "rgba(255,255,255,0.04)", fontFamily: "'JetBrains Mono', monospace", marginBottom: 8, letterSpacing: "-0.02em" }}>{s.n}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.6)", marginBottom: 6 }}>{s.t}</div>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.25)", lineHeight: 1.65 }}>{s.d}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(React.createElement(App), document.getElementById("root"));
+</script>
+</body>
+</html>
