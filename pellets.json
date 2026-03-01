@@ -1,6 +1,12 @@
 [
   {
     "type": "IDEA",
+    "time": "21:24",
+    "date": "2026-02-28",
+    "content": "App that calculates driving efficiency: Instead of showing speed, it converts vehicle speed to miles per minute, factors in average fuel economy, and provides a score based on efficient driving over time."
+  },
+  {
+    "type": "IDEA",
     "time": "20:31",
     "date": "2026-02-28",
     "content": "Agent that monitors Steelhead Alley conditions for anglers: Runs a social media account to post daily updates about fishing conditions, tips, and local news."
