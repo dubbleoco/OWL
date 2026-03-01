@@ -42,6 +42,12 @@
     "content": "Raptor rescue initiative focused on rehabilitation and education about raptors."
   },
   {
+    "type": "TASK",
+    "time": "00:55",
+    "date": "2026-02-28",
+    "content": "Edit Owl dashboard page to allow pellets to be selectable and deletable."
+  },
+  {
     "type": "[IDEA]",
     "time": "Blueberry-flavored gum",
     "date": "2026-02-26",
