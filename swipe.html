@@ -264,7 +264,12 @@
     TOAST.className='toast '+t; TOAST.textContent=txt;
     TOAST.classList.add('show'); setTimeout(()=>TOAST.classList.remove('show'),1600);
   }
-  function decide(p, d) { dec[pk(p)]=d; sv(); toast(d==='archived'?'nope-toast':'like-toast', d==='archived'?'\u2718  Archived':'\u{1F525}  Going deeper'); }
+  async function decide(p, d) {
+    dec[pk(p)] = {decision:d, date:p.date, time:p.time, type:p.type, content:(p.rawContent||p.content).substring(0,100), decidedAt:new Date().toISOString()};
+    toast(d==='archived'?'nope-toast':'like-toast', d==='archived'?'\u2718  Archived':'\u{1F525}  Going deeper');
+    await sv();
+    render();
+  }
 
   function render() { const queue=q(); view==='cards'?renderCards(queue):renderMatches(queue); }
 
@@ -402,7 +407,7 @@
   }
 
   async function init() {
-    ld();
+    await ld();
     try{const r=await fetch('./pellets.json?t='+Date.now());if(r.ok)all=parse(await r.json());}catch(e){}
     render();
   }

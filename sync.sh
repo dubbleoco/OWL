@@ -1,6 +1,9 @@
 #!/bin/bash
 cd /Users/dubbleo/OWL
 
+# Pull latest (gets decisions.json from swipe app)
+/usr/bin/git pull --quiet 2>/dev/null || true
+
 # Export pellets
 /opt/homebrew/bin/python3 /Users/dubbleo/OWL/export.py
 
