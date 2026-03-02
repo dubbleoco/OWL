@@ -1,6 +1,12 @@
 [
   {
     "type": "IDEA",
+    "time": "12:46 (from Berm)",
+    "date": "2026-03-02",
+    "content": "Skill concept: Restaurant365 Weekly Schedule Scraper \u2014 logs into R365 via browser automation, pulls the week's schedule (employee names, roles, shift times, sections), and outputs a spreadsheet (CSV or Excel) so staff know who they're working with each shift. Auth via env vars or 1Password. Could also tap R365's REST API if the account has API access. Flag for future skill development."
+  },
+  {
+    "type": "IDEA",
     "time": "11:10",
     "date": "2026-03-02",
     "content": "BermSnap sub-agent concept: Computer vision agent that auto-identifies and tags bib numbers on bikes/riders in motocross photos. Could use OCR + object detection to read plate/bib numbers, then auto-tag photos by rider number for easy sorting, delivery, or athlete lookup. Would dramatically speed up post-event photo workflow."
