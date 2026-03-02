@@ -253,8 +253,29 @@
 
   let all = [], dec = {}, view = 'matches', ci = 0;
 
-  function ld() { try { dec = JSON.parse(localStorage.getItem(SK)||'{}'); } catch(e) { dec={}; } }
-  function sv() { try { localStorage.setItem(SK, JSON.stringify(dec)); } catch(e) {} }
+  async function ld() {
+    try {
+      const r = await fetch('https://api.github.com/repos/'+GH_REPO+'/contents/'+GH_FILE, {
+        headers: {'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}
+      });
+      if (r.ok) { const data = await r.json(); ghSha = data.sha; dec = JSON.parse(atob(data.content)); }
+      else { dec = {}; ghSha = null; }
+    } catch(e) { try { dec = JSON.parse(localStorage.getItem(SK)||'{}'); } catch(e2) { dec={}; } }
+  }
+  async function sv() {
+    try { localStorage.setItem(SK, JSON.stringify(dec)); } catch(e) {}
+    try {
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify(dec, null, 2))));
+      const body = {message:'swipe',content:content,branch:'main'};
+      if (ghSha) body.sha = ghSha;
+      const r = await fetch('https://api.github.com/repos/'+GH_REPO+'/contents/'+GH_FILE, {
+        method:'PUT',
+        headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+        body:JSON.stringify(body)
+      });
+      if (r.ok) { const data = await r.json(); ghSha = data.content.sha; }
+    } catch(e) { console.error('GH sync err', e); }
+  }
   function pk(p) { return p.date+'|'+p.time+'|'+p.type+'|'+(p.rawContent||p.content).substring(0,30); }
   function q() { return all.filter(p => p.processed && !dec[pk(p)]); }
   function fd(d) { const t=new Date(d+'T00:00:00'); return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][t.getMonth()]+' '+t.getDate(); }
@@ -265,6 +286,10 @@
     TOAST.classList.add('show'); setTimeout(()=>TOAST.classList.remove('show'),1600);
   }
   async function decide(p, d) {
+    dec[pk(p)] = {decision:d, date:p.date, time:p.time, type:p.type, content:(p.rawContent||p.content).substring(0,100), decidedAt:new Date().toISOString()};
+    toast(d==='archived'?'nope-toast':'like-toast', d==='archived'?'\u2718  Archived':'\u{1F525}  Going deeper');
+    await sv(); render();
+  }
     dec[pk(p)] = {decision:d, date:p.date, time:p.time, type:p.type, content:(p.rawContent||p.content).substring(0,100), decidedAt:new Date().toISOString()};
     toast(d==='archived'?'nope-toast':'like-toast', d==='archived'?'\u2718  Archived':'\u{1F525}  Going deeper');
     await sv();
