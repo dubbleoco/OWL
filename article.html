@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OWL — The Thought Capture Agent</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: #2a2a2a;
+    --owl: #e8a020;
+    --owl-dim: #a06a10;
+    --teal: #1fd1b0;
+    --red: #e84040;
+    --purple: #9b6dff;
+    --blue: #4096ff;
+    --text: #e8e4dc;
+    --muted: #888;
+    --tag-bg: #1f1f1f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(232,160,32,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--owl);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(96px, 18vw, 200px);
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 40px;
+  }
+
+  .hero h1 span {
+    color: var(--owl);
+  }
+
+  .hero-sub {
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 640px;
+    line-height: 1.5;
+    margin-bottom: 48px;
+  }
+
+  .hero-sub strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .meta-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .meta-item span {
+    display: block;
+    color: var(--owl);
+    font-size: 15px;
+    letter-spacing: 0;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  /* ── OWL ASCII ── */
+  .owl-mark {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    line-height: 1.3;
+    color: rgba(232,160,32,0.15);
+    white-space: pre;
+    user-select: none;
+    animation: breathe 4s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* ── LAYOUT ── */
+  .article {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 100px 60px;
+  }
+
+  .section {
+    margin-bottom: 120px;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--owl);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 80px;
+  }
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 6vw, 72px);
+    line-height: 1;
+    letter-spacing: 0.01em;
+    margin-bottom: 28px;
+    color: var(--text);
+  }
+
+  h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  p {
+    color: #c8c4bc;
+    margin-bottom: 20px;
+    max-width: 720px;
+  }
+
+  .highlight {
+    color: var(--owl);
+    font-weight: 600;
+  }
+
+  .callout {
+    border-left: 3px solid var(--owl);
+    padding: 20px 28px;
+    background: rgba(232,160,32,0.06);
+    border-radius: 0 8px 8px 0;
+    margin: 36px 0;
+    font-size: 18px;
+    color: var(--text);
+    font-weight: 500;
+    max-width: 700px;
+  }
+
+  /* ── PELLET TYPES ── */
+  .pellets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 40px 0;
+  }
+
+  .pellet-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .pellet-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--pellet-color);
+  }
+
+  .pellet-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--pellet-color);
+  }
+
+  .pellet-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .pellet-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    color: var(--pellet-color);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .pellet-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── TELEGRAM MOCKUP ── */
+  .telegram-mockup {
+    background: #17212b;
+    border-radius: 16px;
+    overflow: hidden;
+    max-width: 420px;
+    border: 1px solid #2a3642;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  }
+
+  .tg-header {
+    background: #232e3c;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #2a3642;
+  }
+
+  .tg-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--owl) 0%, #c87010 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  .tg-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .tg-status {
+    font-size: 12px;
+    color: #54a0d9;
+  }
+
+  .tg-messages {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #0e1621;
+    min-height: 320px;
+  }
+
+  .tg-msg {
+    max-width: 80%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .tg-msg.out {
+    background: #2b5278;
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  .tg-msg.in {
+    background: #182533;
+    color: #e8e8e8;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    border: 1px solid #2a3642;
+  }
+
+  .tg-msg .time {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 3px;
+    text-align: right;
+  }
+
+  .tg-tag {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .tag-idea { background: rgba(155,109,255,0.25); color: #c4a8ff; }
+  .tag-todo { background: rgba(64,150,255,0.25); color: #82b8ff; }
+  .tag-memory { background: rgba(31,209,176,0.25); color: #6eecd4; }
+  .tag-reminder { background: rgba(232,64,64,0.25); color: #ff9090; }
+  .tag-research { background: rgba(232,160,32,0.25); color: #f0c060; }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px 40px;
+    margin: 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .flow::before {
+    content: '';
+    position: absolute;
+    bottom: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(232,160,32,0.05) 0%, transparent 70%);
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .flow-node {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    min-width: 140px;
+    position: relative;
+  }
+
+  .flow-node.source {
+    border-color: var(--owl);
+    background: rgba(232,160,32,0.08);
+    color: var(--owl);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+  }
+
+  .flow-node.process {
+    border-color: var(--teal);
+    background: rgba(31,209,176,0.06);
+    color: var(--teal);
+  }
+
+  .flow-node.dest {
+    border-color: var(--purple);
+    background: rgba(155,109,255,0.08);
+    color: #c4a8ff;
+    font-size: 12px;
+    min-width: 110px;
+  }
+
+  .flow-arrow {
+    color: var(--muted);
+    font-size: 20px;
+    padding: 0 4px;
+  }
+
+  .flow-multi {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* ── TWO COL ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+    margin: 48px 0;
+  }
+
+  @media (max-width: 800px) {
+    .two-col { grid-template-columns: 1fr; }
+    .hero { padding: 60px 30px; }
+    .article { padding: 60px 30px; }
+    .owl-mark { display: none; }
+  }
+
+  /* ── PELLET FEED MOCKUP ── */
+  .feed-mockup {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .feed-header {
+    padding: 14px 20px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .feed-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--owl);
+  }
+
+  .feed-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .feed-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .feed-item:last-child { border-bottom: none; }
+
+  .feed-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  .feed-item-content {
+    flex: 1;
+  }
+
+  .feed-item-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.45;
+  }
+
+  .feed-item-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ── STATS BAR ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 48px 0;
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 28px 24px;
+  }
+
+  .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    line-height: 1;
+    color: var(--owl);
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ── PROBLEM SECTION ── */
+  .problem-list {
+    list-style: none;
+    margin: 28px 0;
+  }
+
+  .problem-list li {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    color: #c8c4bc;
+    font-size: 16px;
+  }
+
+  .problem-list li:last-child { border-bottom: none; }
+
+  .problem-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--owl-dim);
+    min-width: 24px;
+    margin-top: 3px;
+  }
+
+  /* ── QUOTE ── */
+  .big-quote {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.1;
+    color: var(--text);
+    border-left: 4px solid var(--owl);
+    padding-left: 32px;
+    margin: 60px 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .footer-brand {
+    color: var(--owl);
+    font-size: 15px;
+    letter-spacing: 0.1em;
+  }
+
+  /* animations */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.7s forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+
+  .inline-code {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--teal);
+  }
+
+  .atlas-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(232,160,32,0.1);
+    border: 1px solid rgba(232,160,32,0.3);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--owl);
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">OpenClaw Agent Documentation · Dubble-O Design Co.</div>
+  <h1 class="fade-in"><span>O</span>WL</h1>
+  <p class="hero-sub fade-in delay-1">
+    The thought capture agent that catches ideas before they <strong>disappear forever</strong> — and routes them to exactly the right place in the system.
+  </p>
+  <div class="hero-meta fade-in delay-2">
+    <div class="meta-item">CHANNEL<span>Telegram</span></div>
+    <div class="meta-item">ROLE<span>Thought Capture</span></div>
+    <div class="meta-item">ROUTES TO<span>ATLAS + All Agents</span></div>
+    <div class="meta-item">OUTPUT<span>Categorized Pellets</span></div>
+  </div>
+
+  <div class="owl-mark">
+   /\_/\
+  ( o,o )
+  |) . (|
+   "-"-"
+  O · W · L
+  CAPTURE
+  CATEGORIZE
+  ROUTE
+  </div>
+</section>
+
+<!-- MAIN ARTICLE -->
+<main class="article">
+
+  <!-- THE PROBLEM -->
+  <section class="section">
+    <div class="section-label">01 — The Problem</div>
+    <h2>ADHD EATS IDEAS FOR BREAKFAST</h2>
+    <p>
+      Running a one-person fabrication shop means your brain is always running. Customer orders, product ideas, machine settings to remember, things to research, tasks to schedule — it never stops. The problem isn't generating ideas. It's that <span class="highlight">the ideas don't wait for you to be at a desk.</span>
+    </p>
+    <p>
+      They hit while you're mid-cut on the laser. While you're loading filament. While you're driving to a dump run. And with ADHD, if a thought isn't captured the moment it appears, it's gone — not filed away somewhere, actually <em>gone</em>.
+    </p>
+
+    <ul class="problem-list">
+      <li>
+        <span class="problem-num">01</span>
+        Ideas evaporate in seconds if there's no frictionless capture method within arm's reach
+      </li>
+      <li>
+        <span class="problem-num">02</span>
+        Notes apps require context-switching — opening the app, choosing a category, typing correctly — which breaks flow
+      </li>
+      <li>
+        <span class="problem-num">03</span>
+        Unorganized brain dumps (voice memos, random texts to yourself) pile up and never get acted on
+      </li>
+      <li>
+        <span class="problem-num">04</span>
+        Tasks mixed with ideas mixed with reminders means nothing gets prioritized
+      </li>
+      <li>
+        <span class="problem-num">05</span>
+        The cost of forgetting a good business idea or a critical machine setting is real money
+      </li>
+    </ul>
+
+    <div class="callout">
+      The goal wasn't to build a better notes app. It was to build something that thinks alongside you — something you can just <em>talk at</em> and trust it to sort itself out.
+    </div>
+  </section>
+
+  <!-- WHAT OWL IS -->
+  <section class="section">
+    <div class="section-label">02 — What OWL Is</div>
+    <h2>YOUR BRAIN'S OUTBOX</h2>
+    <p>
+      OWL is an AI agent that lives inside a private Telegram bot. You send it anything — a half-formed idea, a task you just remembered, a quote you want to save, a reminder to call someone back — and it <span class="highlight">figures out what you meant and where it belongs</span>.
+    </p>
+    <p>
+      No commands. No menus. No categories to select. Just fire off a message in plain English, voice-to-text, or a photo, and OWL handles the rest. It categorizes every input into a structured format called a <strong>pellet</strong>, tags it by type, and queues it for the appropriate downstream agent or system.
+    </p>
+
+    <div class="big-quote">
+      "Just talk at it.<br>It'll figure it out."
+    </div>
+
+    <!-- Telegram mockup -->
+    <div class="two-col">
+      <div>
+        <h3>Zero-friction capture in action</h3>
+        <p>Here's what a typical OWL conversation looks like. Raw, messy, unfiltered thoughts — sent exactly as they occur. OWL processes each one and responds with a confirmation showing how it categorized the input.</p>
+        <p>The response isn't just acknowledgment — it's a structured pellet back to you, confirming what type it filed it as, what action (if any) is expected, and what routing happened.</p>
+      </div>
+      <div class="telegram-mockup">
+        <div class="tg-header">
+          <div class="tg-avatar">🦉</div>
+          <div>
+            <div class="tg-name">OWL</div>
+            <div class="tg-status">online</div>
+          </div>
+        </div>
+        <div class="tg-messages">
+          <div class="tg-msg out">
+            idea — add a "signature box" upsell to the rubber stamp checkout, like a premium wood block option
+            <div class="time">9:14 AM</div>
+          </div>
+          <div class="tg-msg in">
+            <span class="tg-tag tag-idea">IDEA</span> Captured. Routed to Dubble-O Design queue.<br><br>
+            <strong>Signature wood block upsell</strong> — premium option at rubber stamp checkout. Tagged: #products #upsell #stamps
+            <div class="time">9:14 AM</div>
+          </div>
+          <div class="tg-msg out">
+            remind me tomorrow at 9am to check on the iKamper BDV restock order
+            <div class="time">9:31 AM</div>
+          </div>
+          <div class="tg-msg in">
+            <span class="tg-tag tag-reminder">REMINDER</span> Set for tomorrow 9:00 AM.<br><br>
+            "Check iKamper BDV restock order" — will surface via ATLAS morning brief.
+            <div class="time">9:31 AM</div>
+          </div>
+          <div class="tg-msg out">
+            todo — look into whether bambu supports multi-color on the A1 for the gridpawn standoffs
+            <div class="time">10:02 AM</div>
+          </div>
+          <div class="tg-msg in">
+            <span class="tg-tag tag-todo">TODO</span> Added to fabrication task queue.<br><br>
+            Bambu A1 multi-color support → Gridpawn standoff feasibility. Priority: normal.
+            <div class="time">10:02 AM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PELLET TYPES -->
+  <section class="section">
+    <div class="section-label">03 — The Pellet System</div>
+    <h2>FIVE CATEGORIES.<br>ZERO DECISIONS.</h2>
+    <p>
+      OWL classifies every input into one of five pellet types. You don't tell it which type — it infers from context. A sentence like <span class="inline-code">"maybe I should try resin casting"</span> becomes an IDEA. <span class="inline-code">"Call the supplier back"</span> becomes a TODO. You never have to think about it.
+    </p>
+
+    <div class="pellets-grid">
+      <div class="pellet-card" style="--pellet-color: #9b6dff">
+        <div class="pellet-icon">💡</div>
+        <div class="pellet-name">IDEA</div>
+        <div class="pellet-desc">Product concepts, business strategies, creative directions. Routed to the relevant business agent for review.</div>
+      </div>
+      <div class="pellet-card" style="--pellet-color: #4096ff">
+        <div class="pellet-icon">✓</div>
+        <div class="pellet-name">TODO</div>
+        <div class="pellet-desc">Actionable tasks, follow-ups, things to build or fix. Queued by agent or business line with priority inference.</div>
+      </div>
+      <div class="pellet-card" style="--pellet-color: #1fd1b0">
+        <div class="pellet-icon">🧠</div>
+        <div class="pellet-name">MEMORY</div>
+        <div class="pellet-desc">Facts, settings, preferences, lessons learned. Persisted to long-term agent context for future reference.</div>
+      </div>
+      <div class="pellet-card" style="--pellet-color: #e84040">
+        <div class="pellet-icon">⏰</div>
+        <div class="pellet-name">REMINDER</div>
+        <div class="pellet-desc">Time-sensitive items. Parsed for date/time intent and surfaced at the right moment via ATLAS morning brief.</div>
+      </div>
+      <div class="pellet-card" style="--pellet-color: #e8a020">
+        <div class="pellet-icon">🔍</div>
+        <div class="pellet-name">RESEARCH</div>
+        <div class="pellet-desc">Questions, unknowns, things to look into. Can trigger immediate lookup or queue for async deep research.</div>
+      </div>
+    </div>
+
+    <!-- Feed mockup -->
+    <div class="two-col" style="margin-top: 60px;">
+      <div class="feed-mockup">
+        <div class="feed-header">
+          <span class="feed-title">OWL PELLET FEED</span>
+          <span class="feed-count">TODAY · 12 PELLETS</span>
+        </div>
+        <div class="feed-item">
+          <div class="feed-dot" style="background: #9b6dff"></div>
+          <div class="feed-item-content">
+            <div class="feed-item-text">Add weathered texture option to leather embossing dies for aged look</div>
+            <div class="feed-item-meta"><span class="tg-tag tag-idea" style="font-size:10px">IDEA</span> · Dubble-O Design · 7:42 AM</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-dot" style="background: #4096ff"></div>
+          <div class="feed-item-content">
+            <div class="feed-item-text">Update SmugMug gallery tags for last weekend's motocross event</div>
+            <div class="feed-item-meta"><span class="tg-tag tag-todo" style="font-size:10px">TODO</span> · BermSnap · 8:15 AM</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-dot" style="background: #1fd1b0"></div>
+          <div class="feed-item-content">
+            <div class="feed-item-text">Thunder Laser: 65% power, 18mm/s for 3mm acrylic clean cuts</div>
+            <div class="feed-item-meta"><span class="tg-tag tag-memory" style="font-size:10px">MEMORY</span> · Fabrication · 9:03 AM</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-dot" style="background: #e84040"></div>
+          <div class="feed-item-content">
+            <div class="feed-item-text">Order more 3mm Baltic birch before Friday — running low</div>
+            <div class="feed-item-meta"><span class="tg-tag tag-reminder" style="font-size:10px">REMINDER</span> · Thu 5:00 PM · 10:30 AM</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-dot" style="background: #e8a020"></div>
+          <div class="feed-item-content">
+            <div class="feed-item-text">Does Shopify support split-pay options natively or need app?</div>
+            <div class="feed-item-meta"><span class="tg-tag tag-research" style="font-size:10px">RESEARCH</span> · Sock Riot · 11:14 AM</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3>The pellet feed</h3>
+        <p>Every message you send OWL shows up in a structured feed — sorted by type, tagged by business line, timestamped. The feed is visible from the OpenClaw dashboard, but more importantly, it's <span class="highlight">processed automatically</span> by the downstream agents.</p>
+        <p>IDEAs get queued for the relevant business agent's next review cycle. TODOs get assigned priority and scheduled. MEMORYs get written into agent context. REMINDERs get scheduled for ATLAS to surface at the right time. RESEARCH items get queued or immediately actioned.</p>
+        <p>The pellet feed is effectively the <strong>nervous system input</strong> for the entire OpenClaw stack.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE FLOW -->
+  <section class="section">
+    <div class="section-label">04 — Routing Architecture</div>
+    <h2>FROM BRAIN<br>TO THE RIGHT AGENT</h2>
+    <p>
+      OWL doesn't just capture and store — it routes. Each pellet carries metadata that tells the OpenClaw routing layer which agent should act on it. A product idea for Gridpawn goes to the Dubble-O Design agent. A photography follow-up goes to BermSnap. A fly fishing booking note goes to the Guide agent.
+    </p>
+
+    <div class="flow">
+      <div class="flow-row" style="margin-bottom: 24px; justify-content: center;">
+        <div class="flow-node source">YOUR BRAIN<br><small style="opacity:0.6">Telegram message</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node process">OWL AGENT<br><small style="opacity:0.6">Classify + structure</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node source" style="border-color: var(--teal); color: var(--teal); background: rgba(31,209,176,0.06);">PELLET<br><small style="opacity:0.6">Typed + tagged</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node process" style="border-color: var(--owl); color: var(--owl); background: rgba(232,160,32,0.08);">ATLAS<br><small style="opacity:0.6">Orchestrator routes</small></div>
+      </div>
+      <div style="display: flex; justify-content: center; margin-bottom: 24px;">
+        <div style="width: 1px; height: 30px; background: var(--border);"></div>
+      </div>
+      <div class="flow-row" style="justify-content: center; gap: 12px; flex-wrap: wrap;">
+        <div class="flow-node dest">Dubble-O<br>Design</div>
+        <div class="flow-node dest">BermSnap</div>
+        <div class="flow-node dest">Guide<br>Agent</div>
+        <div class="flow-node dest">Sock Riot</div>
+        <div class="flow-node dest">AgentORP</div>
+        <div class="flow-node dest">iCal /<br>Reminders</div>
+      </div>
+    </div>
+
+    <p>
+      Routing is determined by a combination of keyword context, the pellet type, and the sender pattern. OWL knows the shape of each business line in the OpenClaw stack — fabrication, photography, guiding, e-commerce, trading — and infers which agent should receive the pellet based on content alone.
+    </p>
+    <p>
+      For ambiguous pellets, ATLAS makes the final routing call. For unambiguous ones — like <span class="inline-code">"add to tomorrow's BermSnap checklist"</span> — OWL routes directly.
+    </p>
+  </section>
+
+  <!-- WHY IT WAS BUILT -->
+  <section class="section">
+    <div class="section-label">05 — Why I Built It</div>
+    <h2>THE ADHD<br>ACCOMMODATION</h2>
+    <p>
+      The honest answer is that OWL was built because I was losing too much. Ideas that came during fabrication work. Machine settings I figured out through trial and error and then forgot. Tasks that surfaced at 11pm and evaporated by morning. The mental load of running six separate revenue streams with no administrative support is significant, and my brain doesn't file things neatly.
+    </p>
+    <p>
+      Every other solution I tried had too much friction. Opening a notes app requires a conscious decision to switch context. Voice memos pile up unprocessed. Sticky notes get buried. The thing that was missing wasn't storage — it was <span class="highlight">an intelligent receiver that never requires you to organize anything yourself</span>.
+    </p>
+
+    <div class="callout">
+      OWL is not a productivity tool. It's an external working memory that speaks plain English and knows where everything belongs. The goal is: zero cognitive overhead at the moment of capture.
+    </div>
+
+    <p>
+      The OpenClaw system was designed from the start with ADHD accommodations in mind: structured scheduling, shame-free redirection, focus protection, minimal context-switching. OWL is the front door of that system. It's the reason you can be elbow-deep in a CNC job and still capture a business idea without losing either.
+    </p>
+    <p>
+      The other design principle baked into OWL is that it should never judge. No error messages, no "I don't understand," no requiring you to rephrase. If the message is ambiguous, OWL makes its best inference, shows its work in the response, and asks for a thumbs up if needed. The bar for capture is as low as possible on purpose.
+    </p>
+  </section>
+
+  <!-- STATS -->
+  <section class="section">
+    <div class="section-label">06 — The Payoff</div>
+    <h2>WHAT CHANGES<br>WHEN IT WORKS</h2>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-val">0s</div>
+        <div class="stat-label">Decision time required to capture a thought</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">5</div>
+        <div class="stat-label">Pellet types that cover every kind of input</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">6+</div>
+        <div class="stat-label">Business lines routed automatically from a single inbox</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">∞</div>
+        <div class="stat-label">Ideas no longer lost mid-fabrication</div>
+      </div>
+    </div>
+
+    <p>
+      Before OWL, the process looked like: think of something → decide if it's worth stopping for → if yes, context-switch to a note app → pick a category → type it out → close app → get back to work. Most ideas didn't make it past step two.
+    </p>
+    <p>
+      After OWL, the process looks like: think of something → send it to Telegram → keep working. That's it. The organizing happens asynchronously, without you. By the time you check in with ATLAS at the end of the day, your ideas are sorted, your tasks are queued, your reminders are scheduled, and your machine settings are saved.
+    </p>
+    <p>
+      It's not magic. It's just <span class="highlight">one good agent doing one job extremely well</span> — which turns out to be the thing that makes all the other agents possible.
+    </p>
+  </section>
+
+  <!-- TECHNICAL NOTE -->
+  <section class="section">
+    <div class="section-label">07 — Under the Hood</div>
+    <h2>TECHNICAL<br>DETAILS</h2>
+    <p>OWL runs as part of the OpenClaw multi-agent stack on a local M4 Pro Mac Mini. It's reachable via Telegram and operates as a persistent agent process managed by the OpenClaw runtime.</p>
+
+    <div class="flow" style="padding: 32px 28px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+        <div>
+          <div class="section-label" style="margin-bottom: 12px">RUNTIME</div>
+          <p style="font-size: 14px; color: var(--muted); max-width: none;">OpenClaw agent runtime · Mac Mini M4 Pro (24GB) · Node-based agent process · Persistent session management via <span class="inline-code">.openclaw/agents/owl/sessions/</span></p>
+        </div>
+        <div>
+          <div class="section-label" style="margin-bottom: 12px">CHANNEL</div>
+          <p style="font-size: 14px; color: var(--muted); max-width: none;">Telegram bot · Bound via <span class="inline-code">openclaw agents bindings</span> · Inbound messages from registered peer IDs only · Private bot, not public-facing</p>
+        </div>
+        <div>
+          <div class="section-label" style="margin-bottom: 12px">OUTPUT FORMAT</div>
+          <p style="font-size: 14px; color: var(--muted); max-width: none;">Structured JSONL pellets · Type + content + tags + routing metadata · Stored in session logs · Queryable by ATLAS for daily briefing</p>
+        </div>
+        <div>
+          <div class="section-label" style="margin-bottom: 12px">ROUTING</div>
+          <p style="font-size: 14px; color: var(--muted); max-width: none;">Content-based agent routing via ATLAS orchestrator · Direct routes for unambiguous targets · Fallback to ATLAS review queue for ambiguous pellets</p>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top: 32px;">
+      OWL was the first agent deployed in the OpenClaw stack — intentionally. The principle behind OpenClaw is: <strong>get one agent producing real value before starting the next</strong>. OWL was chosen first because it's the agent that feeds all the others. Without a reliable thought capture layer, every other agent in the system is starting from an incomplete picture.
+    </p>
+    <p>
+      The agent's session logs at <span class="inline-code">~/.openclaw/agents/owl/sessions/</span> use the standard JSONL format with <span class="inline-code">type: "message"</span> entries. These logs are the source of truth for the OpenClaw observability dashboard and ATLAS's end-of-day summary generation.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  <div>
+    <div class="footer-brand">DUBBLE-O DESIGN CO.</div>
+    <div style="margin-top: 6px;">Chelsea, Michigan · OpenClaw Agent Documentation</div>
+  </div>
+  <div style="text-align: right;">
+    <div style="color: var(--owl); margin-bottom: 4px;">OWL — Thought Capture Agent</div>
+    <div>Part of the OpenClaw ecosystem</div>
+  </div>
+</footer>
+
+</body>
+</html>
