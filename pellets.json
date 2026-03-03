@@ -1,6 +1,12 @@
 [
   {
     "type": "IDEA",
+    "time": "00:54",
+    "date": "2026-03-03",
+    "content": "Loop Faith into the Owl idea stream \u2014 share the daily pellet digests or give her access/visibility to what Owl is processing. Could be read-only (digest forwarded to her) or collaborative (she can submit ideas too)."
+  },
+  {
+    "type": "IDEA",
     "time": "12:46 (from Berm)",
     "date": "2026-03-02",
     "content": "Skill concept: Restaurant365 Weekly Schedule Scraper \u2014 logs into R365 via browser automation, pulls the week's schedule (employee names, roles, shift times, sections), and outputs a spreadsheet (CSV or Excel) so staff know who they're working with each shift. Auth via env vars or 1Password. Could also tap R365's REST API if the account has API access. Flag for future skill development."
