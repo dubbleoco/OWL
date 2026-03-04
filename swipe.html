@@ -251,7 +251,10 @@
   const TE = { IDEA:'\u{1F4A1}', TODO:'\u26A1', TASK:'\u26A1', RESEARCH:'\u{1F50D}', MEMORY:'\u{1F9E0}', URGENT:'\u{1F525}' };
   const TN = { IDEA:'Idea', TODO:'To Do', TASK:'Task', RESEARCH:'Research', MEMORY:'Memory', URGENT:'Urgent' };
 
-  let all = [], dec = {}, view = 'matches', ci = 0;
+  const GH_TOKEN = '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';
+  const GH_REPO = 'dubbleoco/OWL';
+  const GH_FILE = 'decisions.json';
+  let all=[], dec={}, view='matches', ci=0, ghSha=null;
 
   async function ld() {
     try {
