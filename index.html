@@ -10,446 +10,228 @@
   :root {
     --bg: #0a0a0c;
     --surface: #111114;
-    --surface-2: #18181c;
     --border: rgba(255,255,255,0.06);
     --text: #e8e6e3;
     --text-dim: rgba(255,255,255,0.35);
     --text-muted: rgba(255,255,255,0.18);
-    --idea: #e2a832;
-    --idea-bg: rgba(226,168,50,0.08);
-    --todo: #5b8ade;
-    --todo-bg: rgba(91,138,222,0.08);
-    --research: #3dba8a;
-    --research-bg: rgba(61,186,138,0.08);
-    --memory: #a87bdb;
-    --memory-bg: rgba(168,123,219,0.08);
-    --urgent: #e05252;
-    --urgent-bg: rgba(224,82,82,0.08);
+    --idea: #e2a832; --idea-bg: rgba(226,168,50,0.08);
+    --todo: #5b8ade; --todo-bg: rgba(91,138,222,0.08);
+    --task: #5b8ade; --task-bg: rgba(91,138,222,0.08);
+    --research: #3dba8a; --research-bg: rgba(61,186,138,0.08);
+    --memory: #a87bdb; --memory-bg: rgba(168,123,219,0.08);
+    --urgent: #e05252; --urgent-bg: rgba(224,82,82,0.08);
+    --like: #00d48a; --like-bg: rgba(0,212,138,0.08);
+    --nope: #ff4458; --nope-bg: rgba(255,68,88,0.08);
+    --gold: #f5c842; --gold-bg: rgba(245,200,66,0.08);
     --mono: 'DM Mono', 'JetBrains Mono', monospace;
     --serif: 'Newsreader', Georgia, serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--serif);
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
+  body { background: var(--bg); color: var(--text); font-family: var(--serif); min-height: 100vh; -webkit-font-smoothing: antialiased; }
   ::selection { background: rgba(226,168,50,0.3); }
   ::-webkit-scrollbar { width: 3px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
-
-  .shell {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 60px 24px 120px;
-  }
-
-  /* Header */
-  .header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 48px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 24px;
-  }
+  .shell { max-width: 900px; margin: 0 auto; padding: 60px 24px 120px; }
+  .header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 48px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
   .header-left { display: flex; align-items: baseline; gap: 16px; }
-  .owl-icon {
-    font-size: 28px;
-    filter: grayscale(0.3);
-  }
-  .title {
-    font-family: var(--mono);
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-  }
-  .status {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .status-dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: #3dba8a;
-    animation: pulse 3s ease-in-out infinite;
-  }
+  .owl-icon { font-size: 28px; filter: grayscale(0.3); }
+  .title { font-family: var(--mono); font-size: 13px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .swipe-link { font-family: var(--mono); font-size: 11px; color: var(--gold); text-decoration: none; padding: 5px 12px; border-radius: 3px; border: 1px solid rgba(245,200,66,0.2); transition: all 0.2s; }
+  .swipe-link:hover { background: var(--gold-bg); border-color: rgba(245,200,66,0.4); }
+  .status { font-family: var(--mono); font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+  .status-dot { width: 5px; height: 5px; border-radius: 50%; background: #3dba8a; animation: pulse 3s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-  /* Stats bar */
-  .stats {
-    display: flex;
-    gap: 32px;
-    margin-bottom: 40px;
-    padding: 16px 0;
-  }
-  .stat {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .stat-value {
-    font-family: var(--mono);
-    font-size: 24px;
-    font-weight: 300;
-    letter-spacing: -0.02em;
-    color: var(--text);
-  }
-  .stat-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-  }
-
-  /* Filters */
-  .filters {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }
-  .filter-btn {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.05em;
-    padding: 6px 14px;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    background: transparent;
-    color: var(--text-dim);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
+  .stats { display: flex; gap: 32px; margin-bottom: 40px; padding: 16px 0; flex-wrap: wrap; }
+  .stat { display: flex; flex-direction: column; gap: 4px; }
+  .stat-value { font-family: var(--mono); font-size: 24px; font-weight: 300; letter-spacing: -0.02em; }
+  .stat-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+  .filters { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+  .filter-btn { font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; padding: 6px 14px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
   .filter-btn:hover { border-color: rgba(255,255,255,0.15); color: var(--text); }
-  .filter-btn.active {
-    background: rgba(255,255,255,0.05);
-    border-color: rgba(255,255,255,0.2);
-    color: var(--text);
-  }
-
-  /* Pellet list */
+  .filter-btn.active { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); color: var(--text); }
   .pellet-list { display: flex; flex-direction: column; gap: 2px; }
-
-  .pellet {
-    display: grid;
-    grid-template-columns: 80px 1fr auto;
-    gap: 16px;
-    align-items: baseline;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border);
-    animation: fadeIn 0.3s ease;
-  }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
-  .pellet-type {
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 2px;
-    text-align: center;
-    white-space: nowrap;
-  }
+  .pellet { border-bottom: 1px solid var(--border); animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+  .pellet-row { display: grid; grid-template-columns: 80px 1fr auto; gap: 16px; align-items: baseline; padding: 14px 0; cursor: pointer; transition: background 0.15s; }
+  .pellet-row:hover { background: rgba(255,255,255,0.01); }
+  .pellet-type { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; text-align: center; white-space: nowrap; }
   .pellet-type.IDEA { color: var(--idea); background: var(--idea-bg); }
   .pellet-type.TODO { color: var(--todo); background: var(--todo-bg); }
+  .pellet-type.TASK { color: var(--task); background: var(--task-bg); }
   .pellet-type.RESEARCH { color: var(--research); background: var(--research-bg); }
   .pellet-type.MEMORY { color: var(--memory); background: var(--memory-bg); }
   .pellet-type.URGENT { color: var(--urgent); background: var(--urgent-bg); }
-
-  .pellet-content {
-    font-family: var(--serif);
-    font-size: 15px;
-    line-height: 1.55;
-    color: var(--text);
-  }
-
-  .pellet-meta {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-muted);
-    white-space: nowrap;
-    text-align: right;
-  }
-
-  /* Empty state */
-  .empty {
-    text-align: center;
-    padding: 80px 20px;
-    color: var(--text-dim);
-  }
+  .pellet-main { min-width: 0; }
+  .pellet-content { font-family: var(--serif); font-size: 15px; line-height: 1.55; color: var(--text); }
+  .pellet-badges { display: flex; gap: 6px; margin-top: 6px; align-items: center; flex-wrap: wrap; }
+  .badge { font-family: var(--mono); font-size: 9px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; }
+  .badge.processed { color: var(--like); background: var(--like-bg); }
+  .badge.unprocessed { color: var(--text-muted); background: rgba(255,255,255,0.03); }
+  .badge.archived { color: var(--nope); background: var(--nope-bg); }
+  .badge.deeper { color: var(--gold); background: var(--gold-bg); }
+  .badge.expand-hint { color: var(--text-muted); background: transparent; border: 1px solid var(--border); }
+  .pellet-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .pellet-meta { font-family: var(--mono); font-size: 10px; color: var(--text-muted); white-space: nowrap; }
+  .pellet-chevron { font-size: 12px; color: var(--text-muted); transition: transform 0.2s; }
+  .pellet.open .pellet-chevron { transform: rotate(90deg); }
+  .pellet-detail { display: none; padding: 0 0 16px 96px; }
+  .pellet.open .pellet-detail { display: block; }
+  .pellet-brief { font-family: var(--mono); font-size: 12px; line-height: 1.7; color: var(--text-dim); white-space: pre-wrap; padding: 16px; background: var(--surface); border-radius: 6px; border: 1px solid var(--border); max-height: 400px; overflow-y: auto; }
+  .empty { text-align: center; padding: 80px 20px; color: var(--text-dim); }
   .empty-owl { font-size: 48px; margin-bottom: 16px; filter: grayscale(0.5); }
-  .empty-text {
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.05em;
-  }
-
-  /* How it works */
-  .how-section {
-    margin-top: 64px;
-    padding-top: 32px;
-    border-top: 1px solid var(--border);
-  }
-  .how-title {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 24px;
-  }
-  .how-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 24px;
-  }
-  .how-step-num {
-    font-family: var(--mono);
-    font-size: 32px;
-    font-weight: 300;
-    color: rgba(255,255,255,0.04);
-    margin-bottom: 6px;
-  }
-  .how-step-title {
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text-dim);
-    margin-bottom: 6px;
-  }
-  .how-step-desc {
-    font-size: 12px;
-    color: var(--text-muted);
-    line-height: 1.6;
-  }
-
-  /* Loading */
-  .loading {
-    text-align: center;
-    padding: 60px;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.1em;
-  }
-
+  .empty-text { font-family: var(--mono); font-size: 12px; letter-spacing: 0.05em; }
+  .how-section { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+  .how-title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 24px; }
+  .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px; }
+  .how-step-num { font-family: var(--mono); font-size: 32px; font-weight: 300; color: rgba(255,255,255,0.04); margin-bottom: 6px; }
+  .how-step-title { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--text-dim); margin-bottom: 6px; }
+  .how-step-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+  .loading { text-align: center; padding: 60px; font-family: var(--mono); font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; }
   @media (max-width: 600px) {
     .shell { padding: 32px 16px 80px; }
     .header { flex-direction: column; gap: 12px; }
-    .stats { gap: 20px; flex-wrap: wrap; }
-    .pellet {
-      grid-template-columns: 1fr;
-      gap: 6px;
-    }
-    .pellet-meta { text-align: left; }
+    .stats { gap: 20px; }
+    .pellet-row { grid-template-columns: 1fr; gap: 6px; }
+    .pellet-detail { padding: 0 0 16px 0; }
+    .pellet-right { flex-direction: row; align-items: center; }
     .how-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
-<div class="shell" id="app">
-  <div class="loading">loading pellets...</div>
-</div>
-
+<div class="shell" id="app"><div class="loading">loading pellets...</div></div>
 <script>
 (function() {
-  // Parse pellets.json or fall back to reading embedded data
   const APP = document.getElementById('app');
-
-  // Pellet type metadata
+  const GH_TOKEN = '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';
+  const GH_REPO = 'dubbleoco/OWL';
   const TYPES = {
-    IDEA:     { icon: '\u{1F4A1}', label: 'Idea' },
-    TODO:     { icon: '\u26A1',    label: 'To Do' },
-    RESEARCH: { icon: '\u{1F50D}', label: 'Research' },
-    MEMORY:   { icon: '\u{1F9E0}', label: 'Memory' },
-    URGENT:   { icon: '\u{1F534}', label: 'Urgent' }
+    IDEA:{icon:'\u{1F4A1}',label:'Idea'},TODO:{icon:'\u26A1',label:'To Do'},TASK:{icon:'\u26A1',label:'Task'},
+    RESEARCH:{icon:'\u{1F50D}',label:'Research'},MEMORY:{icon:'\u{1F9E0}',label:'Memory'},URGENT:{icon:'\u{1F534}',label:'Urgent'}
   };
+  let allPellets=[], decisions={}, activeFilter='ALL', openPellets={};
 
-  let allPellets = [];
-  let activeFilter = 'ALL';
+  function parsePellet(p) {
+    const c=p.content||'', pm=c.match(/### PROCESSED[\s\S]*/);
+    let raw=c, proc=null, done=false;
+    if(pm){raw=c.substring(0,pm.index).trim();proc=pm[0].replace(/^### PROCESSED\s*\d{1,2}:\d{2}\s*\n?/,'').replace(/\nTags:.*$/gm,'').replace(/\nStatus:\s*DONE\s*$/g,'').trim();done=true;}
+    else if(c.includes('Status: DONE')){done=true;proc=c;raw=c.split('\n')[0];}
+    return{...p,rawContent:raw,processedContent:proc,processed:done};
+  }
+  function pk(p){return p.date+'|'+p.time+'|'+p.type+'|'+(p.rawContent||p.content).substring(0,30);}
+  function getDecision(p){const d=decisions[pk(p)];if(!d)return null;return typeof d==='string'?d:d.decision;}
+  function fd(d){const t=new Date(d+'T00:00:00');return['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][t.getMonth()]+' '+t.getDate();}
+  function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
-  function formatDate(dateStr) {
-    const d = new Date(dateStr + 'T00:00:00');
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    return months[d.getMonth()] + ' ' + d.getDate();
+  async function loadDecisions(){
+    try{
+      const r=await fetch('https://api.github.com/repos/'+GH_REPO+'/contents/decisions.json',{
+        headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}
+      });
+      if(r.ok){const data=await r.json();decisions=JSON.parse(atob(data.content));}
+    }catch(e){}
   }
 
-  function render() {
-    const filtered = activeFilter === 'ALL'
-      ? allPellets
-      : allPellets.filter(p => p.type === activeFilter);
+  function render(){
+    const filtered = activeFilter==='ALL'?allPellets:
+      activeFilter==='DEEPER'?allPellets.filter(p=>getDecision(p)==='deeper'):
+      activeFilter==='PENDING'?allPellets.filter(p=>p.processed&&!getDecision(p)):
+      activeFilter==='ARCHIVED'?allPellets.filter(p=>getDecision(p)==='archived'):
+      allPellets.filter(p=>p.type===activeFilter);
 
-    // Count by type
-    const counts = {};
-    allPellets.forEach(p => { counts[p.type] = (counts[p.type] || 0) + 1; });
+    const counts={};
+    let processedCount=0,pendingCount=0,deeperCount=0,archivedCount=0;
+    allPellets.forEach(p=>{
+      counts[p.type]=(counts[p.type]||0)+1;
+      if(p.processed)processedCount++;
+      const d=getDecision(p);
+      if(d==='deeper')deeperCount++;
+      else if(d==='archived')archivedCount++;
+      else if(p.processed)pendingCount++;
+    });
 
-    const totalCount = allPellets.length;
-    const typeKeys = Object.keys(counts).sort();
-
-    APP.innerHTML = `
+    APP.innerHTML=`
       <div class="header">
-        <div class="header-left">
-          <span class="owl-icon">\u{1F989}</span>
-          <span class="title">Owl &mdash; Thought Capture</span>
-        </div>
-        <div class="status">
-          <span class="status-dot"></span>
-          listening
+        <div class="header-left"><span class="owl-icon">\u{1F989}</span><span class="title">Owl &mdash; Thought Capture</span></div>
+        <div class="header-right">
+          <a href="./swipe.html" class="swipe-link">\u{1F0CF} Swipe Review</a>
+          <div class="status"><span class="status-dot"></span>listening</div>
         </div>
       </div>
-
       <div class="stats">
-        <div class="stat">
-          <div class="stat-value">${totalCount}</div>
-          <div class="stat-label">Total Pellets</div>
-        </div>
-        ${typeKeys.map(t => `
-          <div class="stat">
-            <div class="stat-value">${counts[t]}</div>
-            <div class="stat-label">${t}s</div>
-          </div>
-        `).join('')}
+        <div class="stat"><div class="stat-value">${allPellets.length}</div><div class="stat-label">Total</div></div>
+        <div class="stat"><div class="stat-value">${processedCount}</div><div class="stat-label">Researched</div></div>
+        <div class="stat"><div class="stat-value">${pendingCount}</div><div class="stat-label">Pending</div></div>
+        <div class="stat"><div class="stat-value">${deeperCount}</div><div class="stat-label">Go Deeper</div></div>
+        <div class="stat"><div class="stat-value">${archivedCount}</div><div class="stat-label">Archived</div></div>
       </div>
-
       <div class="filters">
-        <button class="filter-btn ${activeFilter === 'ALL' ? 'active' : ''}" data-filter="ALL">All</button>
-        ${Object.keys(TYPES).map(t => `
-          <button class="filter-btn ${activeFilter === t ? 'active' : ''}" data-filter="${t}">${TYPES[t].icon} ${TYPES[t].label}</button>
+        <button class="filter-btn ${activeFilter==='ALL'?'active':''}" data-filter="ALL">All</button>
+        <button class="filter-btn ${activeFilter==='PENDING'?'active':''}" data-filter="PENDING">\u{1F551} Pending</button>
+        <button class="filter-btn ${activeFilter==='DEEPER'?'active':''}" data-filter="DEEPER">\u{1F525} Go Deeper</button>
+        <button class="filter-btn ${activeFilter==='ARCHIVED'?'active':''}" data-filter="ARCHIVED">\u2718 Archived</button>
+        ${Object.keys(TYPES).filter(t=>counts[t]).map(t=>`
+          <button class="filter-btn ${activeFilter===t?'active':''}" data-filter="${t}">${TYPES[t].icon} ${TYPES[t].label}</button>
         `).join('')}
       </div>
-
-      ${filtered.length === 0 ? `
-        <div class="empty">
-          <div class="empty-owl">\u{1F989}</div>
-          <div class="empty-text">${activeFilter === 'ALL' ? 'No pellets yet. Send a thought to Atlas via iMessage.' : 'No ' + activeFilter.toLowerCase() + ' pellets.'}</div>
-        </div>
-      ` : `
+      ${filtered.length===0?`
+        <div class="empty"><div class="empty-owl">\u{1F989}</div><div class="empty-text">${activeFilter==='ALL'?'No pellets yet. Send a thought to Atlas via iMessage.':'No matching pellets.'}</div></div>
+      `:`
         <div class="pellet-list">
-          ${filtered.map(p => `
-            <div class="pellet">
-              <span class="pellet-type ${p.type}">${p.type}</span>
-              <span class="pellet-content">${escapeHtml(p.content)}</span>
-              <span class="pellet-meta">${formatDate(p.date)}${p.time ? ' ' + p.time : ''}</span>
-            </div>
-          `).join('')}
+          ${filtered.map((p,i)=>{
+            const d=getDecision(p), key=pk(p), isOpen=openPellets[key];
+            return`<div class="pellet ${isOpen?'open':''}" data-key="${esc(key)}">
+              <div class="pellet-row">
+                <span class="pellet-type ${p.type}">${p.type}</span>
+                <div class="pellet-main">
+                  <div class="pellet-content">${esc(p.rawContent||p.content)}</div>
+                  <div class="pellet-badges">
+                    ${p.processed?'<span class="badge processed">\u2713 Researched</span>':'<span class="badge unprocessed">Unprocessed</span>'}
+                    ${d==='deeper'?'<span class="badge deeper">\u{1F525} Go Deeper</span>':''}
+                    ${d==='archived'?'<span class="badge archived">\u2718 Archived</span>':''}
+                    ${p.processedContent?'<span class="badge expand-hint">'+(isOpen?'\u25B4 Hide':'\u25BE Research')+'</span>':''}
+                  </div>
+                </div>
+                <div class="pellet-right">
+                  <span class="pellet-meta">${fd(p.date)}${p.time?' '+p.time:''}</span>
+                  ${p.processedContent?'<span class="pellet-chevron">\u25B8</span>':''}
+                </div>
+              </div>
+              ${p.processedContent?'<div class="pellet-detail"><div class="pellet-brief">'+esc(p.processedContent)+'</div></div>':''}
+            </div>`;}).join('')}
         </div>
       `}
-
       <div class="how-section">
         <div class="how-title">How it works</div>
         <div class="how-grid">
-          <div>
-            <div class="how-step-num">01</div>
-            <div class="how-step-title">Speak</div>
-            <div class="how-step-desc">Text Atlas via iMessage. Raw thoughts, half-baked ideas, quick reminders.</div>
-          </div>
-          <div>
-            <div class="how-step-num">02</div>
-            <div class="how-step-title">Classify</div>
-            <div class="how-step-desc">Atlas detects the type &mdash; idea, todo, research, memory, urgent &mdash; and asks to confirm.</div>
-          </div>
-          <div>
-            <div class="how-step-num">03</div>
-            <div class="how-step-title">Capture</div>
-            <div class="how-step-desc">Confirmed pellets are written to Owl's memory files. Nothing gets lost.</div>
-          </div>
-          <div>
-            <div class="how-step-num">04</div>
-            <div class="how-step-title">Surface</div>
-            <div class="how-step-desc">This dashboard shows everything. Owl remembers so you don't have to.</div>
-          </div>
+          <div><div class="how-step-num">01</div><div class="how-step-title">Speak</div><div class="how-step-desc">Text Atlas via iMessage. Raw thoughts, half-baked ideas, quick reminders.</div></div>
+          <div><div class="how-step-num">02</div><div class="how-step-title">Research</div><div class="how-step-desc">Owl processes each pellet overnight &mdash; market analysis, costs, feasibility, next steps.</div></div>
+          <div><div class="how-step-num">03</div><div class="how-step-title">Swipe</div><div class="how-step-desc">Review in the morning. Swipe right to go deeper, left to archive. Like a dating app for ideas.</div></div>
+          <div><div class="how-step-num">04</div><div class="how-step-title">Build</div><div class="how-step-desc">The best ideas get a second deep dive. The rest get filed. Nothing gets lost.</div></div>
         </div>
-      </div>
-    `;
+      </div>`;
 
-    // Attach filter handlers
-    APP.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activeFilter = btn.dataset.filter;
+    APP.querySelectorAll('.filter-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{activeFilter=btn.dataset.filter;render();});
+    });
+    APP.querySelectorAll('.pellet-row').forEach(row=>{
+      row.addEventListener('click',()=>{
+        const pellet=row.closest('.pellet');
+        const key=pellet.dataset.key;
+        openPellets[key]=!openPellets[key];
         render();
       });
     });
   }
 
-  function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
-
-  // Parse markdown memory files format:
-  // ## TYPE HH:MM
-  // content line(s)
-  function parseMemoryMarkdown(dateStr, markdown) {
-    const pellets = [];
-    const lines = markdown.split('\n');
-    let current = null;
-
-    for (const line of lines) {
-      const match = line.match(/^## (\w+)\s+(\d{1,2}:\d{2})\s*$/);
-      if (match) {
-        if (current && current.content.trim()) {
-          pellets.push(current);
-        }
-        current = {
-          type: match[1].toUpperCase(),
-          time: match[2],
-          date: dateStr,
-          content: ''
-        };
-      } else if (current) {
-        current.content += (current.content ? '\n' : '') + line;
-      }
-    }
-    if (current && current.content.trim()) {
-      pellets.push(current);
-    }
-    return pellets;
-  }
-
-  // Try loading pellets.json first, fall back to empty
-  async function loadPellets() {
-    try {
-      const resp = await fetch('./pellets.json?t=' + Date.now());
-      if (resp.ok) {
-        const data = await resp.json();
-        // data can be raw pellets array or { files: { "2026-02-28": "markdown..." } }
-        if (Array.isArray(data)) {
-          allPellets = data;
-        } else if (data.files) {
-          allPellets = [];
-          for (const [dateStr, markdown] of Object.entries(data.files)) {
-            allPellets.push(...parseMemoryMarkdown(dateStr, markdown));
-          }
-        }
-        // Sort newest first
-        allPellets.sort((a, b) => {
-          const da = a.date + (a.time || '');
-          const db = b.date + (b.time || '');
-          return db.localeCompare(da);
-        });
-      }
-    } catch(e) {
-      // No pellets.json found — that's fine
-      console.log('No pellets.json found, showing empty state');
-    }
+  async function init(){
+    await loadDecisions();
+    try{const r=await fetch('./pellets.json?t='+Date.now());if(r.ok){allPellets=(await r.json()).map(parsePellet);allPellets.sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));}}catch(e){}
     render();
   }
-
-  loadPellets();
+  init();
 })();
 </script>
 </body>
