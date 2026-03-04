@@ -96,7 +96,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font
 
   function loadDecisions(){
     return fetch('https://api.github.com/repos/'+GH_REPO+'/contents/'+GH_FILE,{
-      headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}
+      headers:{'Authorization':'Bearer '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}
     }).then(function(r){
       if(r.ok) return r.json().then(function(data){ghSha=data.sha;dec=JSON.parse(atob(data.content));});
       else{dec={};ghSha=null;}
@@ -110,7 +110,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font
     if(ghSha)body.sha=ghSha;
     return fetch('https://api.github.com/repos/'+GH_REPO+'/contents/'+GH_FILE,{
       method:'PUT',
-      headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      headers:{'Authorization':'Bearer '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
       body:JSON.stringify(body)
     }).then(function(r){
       if(r.ok) return r.json().then(function(data){ghSha=data.content.sha;});
