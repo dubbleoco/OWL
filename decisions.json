@@ -70,5 +70,13 @@
     "type": "IDEA",
     "content": "Add a Life Coach agent to the OpenClaw fleet — could handle goal tracking, accountability check-ins,",
     "decidedAt": "2026-03-05T00:14:54.128Z"
+  },
+  "2026-03-01|03:08|IDEA|Apple Shortcut: single trigger": {
+    "decision": "deeper",
+    "date": "2026-03-01",
+    "time": "03:08",
+    "type": "IDEA",
+    "content": "Apple Shortcut: single trigger (NFC tap, proximity/location, or Siri command) that simultaneously tu",
+    "decidedAt": "2026-03-05T00:14:57.734Z"
   }
 }
