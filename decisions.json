@@ -150,5 +150,13 @@
     "type": "IDEA",
     "content": "Raptor rescue initiative focused on rehabilitation and education about raptors.",
     "decidedAt": "2026-03-05T00:15:35.089Z"
+  },
+  "2026-02-28|00:55|TASK|Edit Owl dashboard page to all": {
+    "decision": "archived",
+    "date": "2026-02-28",
+    "time": "00:55",
+    "type": "TASK",
+    "content": "Edit Owl dashboard page to allow pellets to be selectable and deletable.",
+    "decidedAt": "2026-03-05T00:15:37.213Z"
   }
 }
