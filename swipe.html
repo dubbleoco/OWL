@@ -81,7 +81,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font
 (function(){
   var APP=document.getElementById('app');
   var TOAST=document.getElementById('toast');
-  var GH_TOKEN='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';
+  var GH_TOKEN=localStorage.getItem('owl-gh-token')||'';
+  if(!GH_TOKEN){GH_TOKEN=prompt('Enter your GitHub token for Owl sync:');if(GH_TOKEN)localStorage.setItem('owl-gh-token',GH_TOKEN);}
   var GH_REPO='dubbleoco/OWL';
   var GH_FILE='decisions.json';
   var TE={IDEA:'\u{1F4A1}',TODO:'\u26A1',TASK:'\u26A1',RESEARCH:'\u{1F50D}',MEMORY:'\u{1F9E0}',URGENT:'\u{1F525}'};

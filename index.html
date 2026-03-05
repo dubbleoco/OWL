@@ -105,7 +105,7 @@
 <script>
 (function() {
   const APP = document.getElementById('app');
-  const GH_TOKEN = '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';
+  var GH_TOKEN = localStorage.getItem('owl-gh-token')||'';
   const GH_REPO = 'dubbleoco/OWL';
   const TYPES = {
     IDEA:{icon:'\u{1F4A1}',label:'Idea'},TODO:{icon:'\u26A1',label:'To Do'},TASK:{icon:'\u26A1',label:'Task'},
