@@ -120,7 +120,7 @@
     else if(c.includes('Status: DONE')){done=true;proc=c;raw=c.split('\n')[0];}
     return{...p,rawContent:raw,processedContent:proc,processed:done};
   }
-  function pk(p){return p.date+'|'+p.time+'|'+p.type+'|'+(p.rawContent||p.content).substring(0,30);}
+  function pk(p){var s=p.date+'|'+p.time+'|'+p.type+'|'+(p.rawContent||p.content).substring(0,30);return s.normalize('NFC').replace(/[\u2014\u2013\u2012]/g,'-');}
   function getDecision(p){const d=decisions[pk(p)];if(!d)return null;return typeof d==='string'?d:d.decision;}
   function fd(d){const t=new Date(d+'T00:00:00');return['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][t.getMonth()]+' '+t.getDate();}
   function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
