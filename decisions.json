@@ -38,5 +38,13 @@
     "type": "IDEA",
     "content": "Skill concept: Restaurant365 Weekly Schedule Scraper — logs into R365 via browser automation, pulls ",
     "decidedAt": "2026-03-05T00:14:39.562Z"
+  },
+  "2026-03-02|11:10|IDEA|BermSnap sub-agent concept: Co": {
+    "decision": "deeper",
+    "date": "2026-03-02",
+    "time": "11:10",
+    "type": "IDEA",
+    "content": "BermSnap sub-agent concept: Computer vision agent that auto-identifies and tags bib numbers on bikes",
+    "decidedAt": "2026-03-05T00:14:41.987Z"
   }
 }
