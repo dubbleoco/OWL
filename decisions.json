@@ -158,5 +158,13 @@
     "type": "TASK",
     "content": "Edit Owl dashboard page to allow pellets to be selectable and deletable.",
     "decidedAt": "2026-03-05T00:15:37.213Z"
+  },
+  "2026-02-26|Blueberry-flavored gum|[IDEA]|- Raw: \"idea for a blueberry f": {
+    "decision": "archived",
+    "date": "2026-02-26",
+    "time": "Blueberry-flavored gum",
+    "type": "[IDEA]",
+    "content": "- Raw: \"idea for a blueberry flavored gum\"\n- Reasoning: New product concept; explore flavor profile,",
+    "decidedAt": "2026-03-05T00:15:40.562Z"
   }
 }
