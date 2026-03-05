@@ -94,5 +94,13 @@
     "type": "IDEA",
     "content": "Agent concept: writes naughty fiction, generates voiceover (TTS), then publishes to a monetization p",
     "decidedAt": "2026-03-05T00:15:05.854Z"
+  },
+  "2026-02-28|21:24|IDEA|App that calculates driving ef": {
+    "decision": "archived",
+    "date": "2026-02-28",
+    "time": "21:24",
+    "type": "IDEA",
+    "content": "App that calculates driving efficiency: Instead of showing speed, it converts vehicle speed to miles",
+    "decidedAt": "2026-03-05T00:15:08.807Z"
   }
 }
