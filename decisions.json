@@ -110,5 +110,13 @@
     "type": "IDEA",
     "content": "Agent that monitors Steelhead Alley conditions for anglers: Runs a social media account to post dail",
     "decidedAt": "2026-03-05T00:15:11.654Z"
+  },
+  "2026-02-28|20:25|IDEA|Device that tracks lean angle ": {
+    "decision": "deeper",
+    "date": "2026-02-28",
+    "time": "20:25",
+    "type": "IDEA",
+    "content": "Device that tracks lean angle on a mountain bike: Helps riders improve their cornering technique by ",
+    "decidedAt": "2026-03-05T00:15:17.189Z"
   }
 }
