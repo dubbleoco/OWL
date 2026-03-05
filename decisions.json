@@ -54,5 +54,13 @@
     "type": "IDEA",
     "content": "Agent concept: LLM Scout — scrubs the web daily for the newest, most advanced downloadable/local LLM",
     "decidedAt": "2026-03-05T00:14:44.481Z"
+  },
+  "2026-03-01|09:34|IDEA|App idea: Smart gas station he": {
+    "decision": "archived",
+    "date": "2026-03-01",
+    "time": "09:34",
+    "type": "IDEA",
+    "content": "App idea: Smart gas station heat map. Inputs: real-time gas prices (GasBuddy-style), your vehicle + ",
+    "decidedAt": "2026-03-05T00:14:50.661Z"
   }
 }
