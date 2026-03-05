@@ -62,5 +62,13 @@
     "type": "IDEA",
     "content": "App idea: Smart gas station heat map. Inputs: real-time gas prices (GasBuddy-style), your vehicle + ",
     "decidedAt": "2026-03-05T00:14:50.661Z"
+  },
+  "2026-03-01|03:13|IDEA|Add a Life Coach agent to the ": {
+    "decision": "deeper",
+    "date": "2026-03-01",
+    "time": "03:13",
+    "type": "IDEA",
+    "content": "Add a Life Coach agent to the OpenClaw fleet — could handle goal tracking, accountability check-ins,",
+    "decidedAt": "2026-03-05T00:14:54.128Z"
   }
 }
