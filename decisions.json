@@ -142,5 +142,13 @@
     "type": "IDEA",
     "content": "Raptor rescue initiative: A facility dedicated to the rehabilitation and care of raptors, focusing o",
     "decidedAt": "2026-03-05T00:15:33.049Z"
+  },
+  "2026-02-28|17:59|IDEA|Raptor rescue initiative focus": {
+    "decision": "archived",
+    "date": "2026-02-28",
+    "time": "17:59",
+    "type": "IDEA",
+    "content": "Raptor rescue initiative focused on rehabilitation and education about raptors.",
+    "decidedAt": "2026-03-05T00:15:35.089Z"
   }
 }
