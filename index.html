@@ -186,7 +186,7 @@
               <div class="pellet-row">
                 <span class="pellet-type ${p.type}">${p.type}</span>
                 <div class="pellet-main">
-                  <div class="pellet-content">${esc(p.rawContent||p.content)}</div>
+                  <div class="pellet-content">${esc((p.rawContent||p.content).split('\n')[0].replace(/\*\*/g,'').substring(0,80))}${(p.rawContent||p.content).length>80?'...':''}</div>
                   <div class="pellet-badges">
                     ${p.processed?'<span class="badge processed">\u2713 Researched</span>':'<span class="badge unprocessed">Unprocessed</span>'}
                     ${d==='deeper'?'<span class="badge deeper">\u{1F525} Go Deeper</span>':''}
