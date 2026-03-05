@@ -30,5 +30,13 @@
     "type": "IDEA",
     "content": "**Raw input:** Make the CEO agent adaptive — pay attention to how well Neall responds and gets stuff",
     "decidedAt": "2026-03-05T00:14:36.875Z"
+  },
+  "2026-03-02|12:46 (from Berm)|IDEA|Skill concept: Restaurant365 W": {
+    "decision": "deeper",
+    "date": "2026-03-02",
+    "time": "12:46 (from Berm)",
+    "type": "IDEA",
+    "content": "Skill concept: Restaurant365 Weekly Schedule Scraper — logs into R365 via browser automation, pulls ",
+    "decidedAt": "2026-03-05T00:14:39.562Z"
   }
 }
