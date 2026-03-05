@@ -46,5 +46,13 @@
     "type": "IDEA",
     "content": "BermSnap sub-agent concept: Computer vision agent that auto-identifies and tags bib numbers on bikes",
     "decidedAt": "2026-03-05T00:14:41.987Z"
+  },
+  "2026-03-02|11:06|IDEA|Agent concept: LLM Scout — scr": {
+    "decision": "deeper",
+    "date": "2026-03-02",
+    "time": "11:06",
+    "type": "IDEA",
+    "content": "Agent concept: LLM Scout — scrubs the web daily for the newest, most advanced downloadable/local LLM",
+    "decidedAt": "2026-03-05T00:14:44.481Z"
   }
 }
