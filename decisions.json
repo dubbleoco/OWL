@@ -246,5 +246,13 @@
     "type": "IDEA",
     "content": "**Raw input:** Make the CEO agent adaptive — pay attention to how well Neall responds and gets stuff",
     "decidedAt": "2026-03-06T04:19:12.912Z"
+  },
+  "2026-03-02|11:06|IDEA|Agent concept: LLM Scout - scr": {
+    "decision": "deeper",
+    "date": "2026-03-02",
+    "time": "11:06",
+    "type": "IDEA",
+    "content": "Agent concept: LLM Scout — scrubs the web daily for the newest, most advanced downloadable/local LLM",
+    "decidedAt": "2026-03-06T04:19:15.440Z"
   }
 }
