@@ -1,5 +1,17 @@
 [
   {
+    "type": "\ud83d\udd0d",
+    "time": "RESEARCH 22:55 \u2014 Homemade Pet Food (6 cats + 1 dog)",
+    "date": "2026-03-05",
+    "content": "**Raw input:** \"Idea for a food I can make for my 6 cats and one dog for easily obtained sources that can be frozen. Healthy and cost effective\"\n\n**Routed from:** Atlas (iMessage \u2192 control UI)\n\n**Tags:** personal, pets, health, food, cats, dog, diy, cost-effective\n\n**Status:** PENDING \u2014 needs OWL research pass\n\n**Notes:** Neall has 6 cats and 1 dog. Looking for homemade food recipe using easily sourced ingredients that can be batch-cooked and frozen. Health and cost are priorities.\n\n---"
+  },
+  {
+    "type": "\ud83d\udca1",
+    "time": "IDEA 22:56 \u2014 Programmable Vape Battery for Cannabis Reduction",
+    "date": "2026-03-05",
+    "content": "**Raw input:** \"Idea for vape battery programmable to help one ween off the weed\"\n\n**Routed from:** Atlas (iMessage \u2192 control UI)\n\n**Tags:** personal, health, cannabis, harm-reduction, hardware, product-idea, weed, wean-off\n\n**Status:** PENDING \u2014 needs OWL deep dive\n\n**Notes:** A smart vape battery with programmable limits \u2014 max puffs per day, lockout periods, gradual reduction schedules. Harm-reduction device. Could be a product idea or existing product to find. Research both angles: does something like this exist commercially, and is there a DIY/maker angle?"
+  },
+  {
     "type": "DEEP",
     "time": "DIVE 19:29 \u2014 Adaptive CEO Agent",
     "date": "2026-03-04",
