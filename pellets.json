@@ -2,6 +2,18 @@
   {
     "type": "RESEARCH",
     "time": "Instructions",
+    "date": "2026-03-26-1713-video",
+    "content": "Research this video's content further. Look up:\n- Any products, gear, or brands visible\n- Any techniques, locations, species, or concepts mentioned\n- Relevant context, pricing, background info, or how-to resources\n- Anything Neall might want to know as a follow-up\n\nDeliver findings to CORE as a research brief. CORE will decide whether to forward to Neall.\n\nStatus: PENDING"
+  },
+  {
+    "type": "VISION",
+    "time": "Analysis",
+    "date": "2026-03-26-1713-video",
+    "content": "Vision API error: {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CZSP9duwiz4Qy4srpci1c'}"
+  },
+  {
+    "type": "RESEARCH",
+    "time": "Instructions",
     "date": "2026-03-26-1325-video",
     "content": "Research this video's content further. Look up:\n- Any products, gear, or brands visible\n- Any techniques, locations, species, or concepts mentioned\n- Relevant context, pricing, background info, or how-to resources\n- Anything Neall might want to know as a follow-up\n\nDeliver findings to CORE as a research brief. CORE will decide whether to forward to Neall.\n\nStatus: PENDING"
   },
