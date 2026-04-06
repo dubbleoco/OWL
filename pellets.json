@@ -1,5 +1,17 @@
 [
   {
+    "type": "DIGEST",
+    "time": "Summary for CORE",
+    "date": "2026-04-06",
+    "content": "**To:** CORE (CEO Agent)\n**From:** Owl\n**Date:** Monday, April 6, 2026 \u2014 09:15 AM\n**Subject:** Daily Pellet Digest \u2014 Clean Run\n\n---\n\n**Owl Pellet Inventory \u2014 Status: ALL CLEAR**\n\nScanned all memory files. Every pellet has been processed. Every \"deeper\" decision has received a second-pass deep dive with competitive analysis, revenue projections, cost breakdowns, partnerships, and 30-day action plans.\n\n**Active pellets requiring no further research:**\n1. Homemade Pet Food (6 cats + 1 dog) \u2014 DONE, deep dive complete\n2. Baseball/Softball Fence Organizers \u2014 DONE, deep dive complete\n3. Programmable Vape Battery for Cannabis Reduction \u2014 DONE, deep dive complete\n4. MTB Lean Angle Tracker \u2014 DONE, deep dive complete\n5. Steelhead Alley Conditions Agent \u2014 DONE, deep dive complete\n6. LLM Scout Agent \u2014 DONE, deep dive complete\n7. BermSnap Bib Number CV Agent \u2014 DONE, deep dive complete\n8. Restaurant365 Schedule Scraper \u2014 DONE, deep dive complete\n9. Adaptive CEO Agent \u2014 DONE, deep dive complete\n10. Loop Faith into Owl Idea Stream \u2014 DONE, deep dive complete\n11. Life Coach Agent \u2014 DONE, deep dive complete\n12. Apple Shortcut Home Automation \u2014 DONE, deep dive complete\n\n**No new pellets pending processing.**\n\n**Awaiting:** Fresh input from Neall via iMessage/Telegram, or new video/research pellets routed through Atlas.\n\n---\n\n*Owl \u2014 signing off. Everything is processed.*"
+  },
+  {
+    "type": "OWL",
+    "time": "Digest Run \u2014 09:15 AM (America/Detroit)",
+    "date": "2026-04-06",
+    "content": "### Pellet Scan \u2014 All Memory Files\n\nScanned all memory files in `~/.openclaw/workspace-owl/memory/`:\n- 2023-10-05, 2023-10-30 (legacy placeholders \u2014 no action needed)\n- 2026-02-23 through 2026-03-26\n\n**Result: ZERO unprocessed pellets.**\n\nEvery pellet in every file has:\n- `### PROCESSED HH:MM` section \u2014 Status: DONE\n- All entries marked `deeper` in `~/OWL/decisions.json` have corresponding `### DEEP DIVE HH:MM` sections \u2014 Status: DONE\n\n### decisions.json Scan\n\nReviewed all entries marked `decision: \"deeper\"`:\n- Adaptive CEO Agent (2026-03-04, 2026-03-03) \u2014 DEEP DIVE written\n- Loop Faith (2026-03-03) \u2014 DEEP DIVE written\n- LLM Scout (2026-03-02 \u00d72) \u2014 DEEP DIVE written\n- BermSnap Bib CV Agent (2026-03-02) \u2014 DEEP DIVE written\n- R365 Schedule Scraper (2026-03-02) \u2014 DEEP DIVE written\n- Life Coach Agent (2026-03-01) \u2014 DEEP DIVE written\n- Apple Shortcut Home Auto (2026-03-01) \u2014 DEEP DIVE written\n- Steelhead Alley Agent (2026-02-28) \u2014 DEEP DIVE written\n- MTB Lean Angle Tracker (2026-02-28) \u2014 DEEP DIVE written\n- Homemade Pet Food (2026-03-05) \u2014 DEEP DIVE written\n- Baseball Fence Organizers (2026-03-05) \u2014 DEEP DIVE written\n- Programmable Vape Battery (2026-03-05) \u2014 DEEP DIVE written\n\n**No second-pass deep dives pending.**\n\n### Action Taken\n\nDigest compiled and delivered. Owl is current on all pellets.\n\n---"
+  },
+  {
     "type": "RESEARCH",
     "time": "Instructions",
     "date": "2026-03-26-1713-video",
